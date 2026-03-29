@@ -1,23 +1,23 @@
-// frontend/src/components/ui/Toast/Toast.tsx
-import { toast } from 'sonner';
+// frontend/src/components/ui/Toast/ToastProvider.tsx
+import { Toaster as SonnerToaster } from 'sonner';
 
-export const showToast = {
-  success: (message: string) => {
-    toast.success(message);
-  },
-  error: (message: string) => {
-    toast.error(message);
-  },
-  warning: (message: string) => {
-    toast.warning(message);
-  },
-  info: (message: string) => {
-    toast.info(message);
-  },
-  loading: (message: string) => {
-    return toast.loading(message);
-  },
-  dismiss: (id: string | number) => {
-    toast.dismiss(id);
-  },
+export const ToastProvider = () => {
+  return (
+    <SonnerToaster
+      position="bottom-right"
+      toastOptions={{
+        style: {
+          background: 'var(--toast-bg)',
+          color: 'var(--toast-text)',
+          border: '1px solid var(--border)',
+          borderRadius: '0.5rem',
+          padding: '0.75rem 1rem',
+        },
+        className: 'font-sans',
+        duration: 4000,
+      }}
+      closeButton
+      richColors
+    />
+  );
 };
