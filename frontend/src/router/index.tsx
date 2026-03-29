@@ -5,6 +5,7 @@ import { ProtectedRoute } from '../layouts/ProtectedRoute';
 import { ArtistRoute } from '../layouts/ArtistRoute';
 import { AdminRoute } from '../layouts/AdminRoute';
 import { GuestRoute } from '../layouts/GuestRoute';
+import { AppShell } from '../components/layout/AppShell/AppShell';
 
 // Public Pages
 import { HomePage } from '../pages/public/HomePage';
@@ -52,175 +53,75 @@ import { AdminAnalyticsPage } from '../pages/admin/AdminAnalyticsPage';
 import { AdminSettingsPage } from '../pages/admin/AdminSettingsPage';
 
 export const router = createBrowserRouter([
-  // Public routes
   {
-    path: paths.home,
-    element: <HomePage />,
-  },
-  {
-    path: paths.browse,
-    element: <BrowsePage />,
-  },
-  {
-    path: paths.search,
-    element: <SearchPage />,
-  },
-  {
-    path: paths.contentDetail(':id'),
-    element: <ContentDetailPage />,
-  },
-  {
-    path: paths.artistProfile(':username'),
-    element: <ArtistProfilePage />,
-  },
-  {
-    path: paths.genre(':slug'),
-    element: <GenrePage />,
-  },
-  {
-    path: paths.playlist(':id'),
-    element: <PlaylistPage />,
-  },
-  {
-    path: paths.about,
-    element: <AboutPage />,
-  },
-
-  // Auth routes (guest only)
-  {
-    element: <GuestRoute />,
+    element: <AppShell />,
     children: [
-      {
-        path: paths.login,
-        element: <LoginPage />,
-      },
-      {
-        path: paths.register,
-        element: <RegisterPage />,
-      },
-      {
-        path: paths.forgotPassword,
-        element: <ForgotPasswordPage />,
-      },
-      {
-        path: paths.resetPassword,
-        element: <ResetPasswordPage />,
-      },
-      {
-        path: paths.verifyEmail,
-        element: <EmailVerifyPage />,
-      },
-      {
-        path: paths.oauthCallback,
-        element: <OAuthCallbackPage />,
-      },
-    ],
-  },
+      // Public routes
+      { path: paths.home, element: <HomePage /> },
+      { path: paths.browse, element: <BrowsePage /> },
+      { path: paths.search, element: <SearchPage /> },
+      { path: paths.contentDetail(':id'), element: <ContentDetailPage /> },
+      { path: paths.artistProfile(':username'), element: <ArtistProfilePage /> },
+      { path: paths.genre(':slug'), element: <GenrePage /> },
+      { path: paths.playlist(':id'), element: <PlaylistPage /> },
+      { path: paths.about, element: <AboutPage /> },
 
-  // Protected user routes
-  {
-    element: <ProtectedRoute />,
-    children: [
+      // Auth routes (guest only)
       {
-        path: paths.profile,
-        element: <UserProfilePage />,
+        element: <GuestRoute />,
+        children: [
+          { path: paths.login, element: <LoginPage /> },
+          { path: paths.register, element: <RegisterPage /> },
+          { path: paths.forgotPassword, element: <ForgotPasswordPage /> },
+          { path: paths.resetPassword, element: <ResetPasswordPage /> },
+          { path: paths.verifyEmail, element: <EmailVerifyPage /> },
+          { path: paths.oauthCallback, element: <OAuthCallbackPage /> },
+        ],
       },
-      {
-        path: paths.settings,
-        element: <UserSettingsPage />,
-      },
-      {
-        path: paths.library,
-        element: <LibraryPage />,
-      },
-      {
-        path: paths.following,
-        element: <FollowingPage />,
-      },
-      {
-        path: paths.downloads,
-        element: <DownloadHistoryPage />,
-      },
-    ],
-  },
 
-  // Artist routes
-  {
-    element: <ArtistRoute />,
-    children: [
+      // Protected user routes
       {
-        path: paths.artist.dashboard,
-        element: <ArtistDashboardPage />,
+        element: <ProtectedRoute />,
+        children: [
+          { path: paths.profile, element: <UserProfilePage /> },
+          { path: paths.settings, element: <UserSettingsPage /> },
+          { path: paths.library, element: <LibraryPage /> },
+          { path: paths.following, element: <FollowingPage /> },
+          { path: paths.downloads, element: <DownloadHistoryPage /> },
+        ],
       },
-      {
-        path: paths.artist.content,
-        element: <ArtistContentPage />,
-      },
-      {
-        path: paths.artist.upload,
-        element: <ArtistUploadPage />,
-      },
-      {
-        path: paths.artist.editContent(':id'),
-        element: <ArtistEditContentPage />,
-      },
-      {
-        path: paths.artist.analytics,
-        element: <ArtistAnalyticsPage />,
-      },
-      {
-        path: paths.artist.followers,
-        element: <ArtistFollowersPage />,
-      },
-      {
-        path: paths.artist.settings,
-        element: <ArtistSettingsPage />,
-      },
-    ],
-  },
 
-  // Admin routes
-  {
-    element: <AdminRoute />,
-    children: [
+      // Artist routes
       {
-        path: paths.admin.dashboard,
-        element: <AdminDashboardPage />,
+        element: <ArtistRoute />,
+        children: [
+          { path: paths.artist.dashboard, element: <ArtistDashboardPage /> },
+          { path: paths.artist.content, element: <ArtistContentPage /> },
+          { path: paths.artist.upload, element: <ArtistUploadPage /> },
+          { path: paths.artist.editContent(':id'), element: <ArtistEditContentPage /> },
+          { path: paths.artist.analytics, element: <ArtistAnalyticsPage /> },
+          { path: paths.artist.followers, element: <ArtistFollowersPage /> },
+          { path: paths.artist.settings, element: <ArtistSettingsPage /> },
+        ],
       },
+
+      // Admin routes
       {
-        path: paths.admin.users,
-        element: <AdminUsersPage />,
-      },
-      {
-        path: paths.admin.userDetail(':id'),
-        element: <AdminUserDetailPage />,
-      },
-      {
-        path: paths.admin.content,
-        element: <AdminContentPage />,
-      },
-      {
-        path: paths.admin.moderation,
-        element: <AdminModerationPage />,
-      },
-      {
-        path: paths.admin.reports,
-        element: <AdminReportsPage />,
-      },
-      {
-        path: paths.admin.analytics,
-        element: <AdminAnalyticsPage />,
-      },
-      {
-        path: paths.admin.settings,
-        element: <AdminSettingsPage />,
+        element: <AdminRoute />,
+        children: [
+          { path: paths.admin.dashboard, element: <AdminDashboardPage /> },
+          { path: paths.admin.users, element: <AdminUsersPage /> },
+          { path: paths.admin.userDetail(':id'), element: <AdminUserDetailPage /> },
+          { path: paths.admin.content, element: <AdminContentPage /> },
+          { path: paths.admin.moderation, element: <AdminModerationPage /> },
+          { path: paths.admin.reports, element: <AdminReportsPage /> },
+          { path: paths.admin.analytics, element: <AdminAnalyticsPage /> },
+          { path: paths.admin.settings, element: <AdminSettingsPage /> },
+        ],
       },
     ],
   },
 
   // 404
-  {
-    path: '*',
-    element: <NotFoundPage />,
-  },
+  { path: '*', element: <NotFoundPage /> },
 ]);
