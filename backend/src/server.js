@@ -24,6 +24,22 @@ app.use(cors({
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 
+// ── Root route ────────────────────────────────────────────────────────────────
+app.get("/", (req, res) => {
+  res.json({
+    message: "AfroMuziki API is running",
+    version: "1.0.0",
+    endpoints: {
+      health: "/health",
+      auth: "/auth",
+      tracks: "/tracks",
+      upload: "/upload"
+    },
+    status: "online",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // ── Global rate limit ─────────────────────────────────────────────────────────
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
