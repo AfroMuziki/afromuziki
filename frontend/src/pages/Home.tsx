@@ -16,6 +16,23 @@ function mapTrack(t: any): Track {
   };
 }
 
+function SkeletonCard() {
+  return (
+    <div style={{
+      display: "flex", alignItems: "center", gap: 14,
+      padding: "14px 16px", borderRadius: 16,
+      background: "rgba(12,24,41,0.5)",
+      border: "1px solid rgba(201,146,42,0.06)",
+    }}>
+      <div className="skeleton" style={{ width: 56, height: 56, borderRadius: 12, flexShrink: 0 }} />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="skeleton" style={{ height: 13, width: "65%" }} />
+        <div className="skeleton" style={{ height: 11, width: "40%" }} />
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["tracks"],
@@ -25,47 +42,101 @@ export default function Home() {
   const queue: Track[] = (data || []).map(mapTrack);
 
   return (
-    <div className="px-4 py-6 pb-28">
-      <div className="mb-6">
-        <h1 className="text-cream text-2xl font-bold tracking-tight">Trending Now</h1>
-        <p className="text-cream/40 text-sm mt-1">Fresh African music & video</p>
+    <div>
+      {/* Hero */}
+      <div style={{
+        padding: "36px 20px 28px",
+        position: "relative", overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", top: -40, right: -40,
+          width: 200, height: 200, borderRadius: "50%",
+          background: "radial-gradient(circle, rgba(201,146,42,0.12) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+        <div className="animate-fade-up" style={{
+          fontSize: 11, fontWeight: 800, letterSpacing: "0.2em",
+          textTransform: "uppercase", color: "#c9922a", marginBottom: 8,
+        }}>
+          🔥 Now Streaming
+        </div>
+        <h1 className="animate-fade-up-1" style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: 30, fontWeight: 700, lineHeight: 1.15,
+          color: "#f2e8d5", marginBottom: 6,
+          letterSpacing: "-0.02em",
+        }}>
+          African Music<br />& Video
+        </h1>
+        <p className="animate-fade-up-2" style={{
+          fontSize: 13, color: "rgba(242,232,213,0.45)",
+          fontWeight: 500, lineHeight: 1.5,
+        }}>
+          Discover the freshest sounds from across the continent
+        </p>
       </div>
 
-      {isLoading && (
-        <div className="space-y-3">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04] animate-pulse">
-              <div className="w-[52px] h-[52px] rounded-lg bg-white/10 flex-shrink-0" />
-              <div className="flex-1 space-y-2">
-                <div className="h-3 bg-white/10 rounded w-3/4" />
-                <div className="h-2.5 bg-white/5 rounded w-1/2" />
-              </div>
+      {/* Track list */}
+      <div style={{ padding: "0 16px 20px" }}>
+        {/* Section header */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between",
+          marginBottom: 14,
+        }}>
+          <div style={{
+            fontSize: 11, fontWeight: 800, letterSpacing: "0.14em",
+            textTransform: "uppercase", color: "rgba(242,232,213,0.35)",
+          }}>
+            Trending
+          </div>
+          <div style={{
+            width: 40, height: 1,
+            background: "linear-gradient(90deg, rgba(201,146,42,0.4), transparent)",
+          }} />
+        </div>
+
+        {isLoading && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
+          </div>
+        )}
+
+        {error && (
+          <div style={{
+            textAlign: "center", padding: "60px 20px",
+            color: "rgba(242,232,213,0.3)",
+          }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>📡</div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: "rgba(242,232,213,0.5)" }}>
+              Connection failed
             </div>
-          ))}
-        </div>
-      )}
+            <div style={{ fontSize: 12 }}>Check your internet and try again</div>
+          </div>
+        )}
 
-      {error && (
-        <div className="text-center py-12 text-cream/40">
-          <p className="text-4xl mb-3">🎵</p>
-          <p className="text-sm">Could not load tracks. Check your connection.</p>
-        </div>
-      )}
+        {data && data.length === 0 && (
+          <div style={{
+            textAlign: "center", padding: "60px 20px",
+            color: "rgba(242,232,213,0.3)",
+          }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🎵</div>
+            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: "rgba(242,232,213,0.5)" }}>
+              No tracks yet
+            </div>
+            <div style={{ fontSize: 12 }}>Be the first to upload music</div>
+          </div>
+        )}
 
-      {data && data.length === 0 && (
-        <div className="text-center py-12 text-cream/40">
-          <p className="text-4xl mb-3">🎵</p>
-          <p className="text-sm">No tracks yet. Be the first to upload.</p>
-        </div>
-      )}
-
-      {data && data.length > 0 && (
-        <div className="space-y-2">
-          {data.map((t: any) => (
-            <TrackCard key={t.id} track={mapTrack(t)} queue={queue} />
-          ))}
-        </div>
-      )}
+        {data && data.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {data.map((t: any, i: number) => (
+              <div key={t.id} style={{ animation: `fadeUp 0.35s ${i * 0.04}s ease both` }}>
+                <TrackCard track={mapTrack(t)} queue={queue} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

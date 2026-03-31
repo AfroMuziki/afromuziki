@@ -24,54 +24,99 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-navy-dark">
-      <div className="w-full max-w-sm">
+    <div style={{
+      minHeight: "100vh", display: "flex", alignItems: "center",
+      justifyContent: "center", padding: "20px",
+    }}>
+      {/* Bg glow */}
+      <div style={{
+        position: "fixed", top: "20%", left: "50%", transform: "translateX(-50%)",
+        width: 300, height: 300, borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201,146,42,0.08) 0%, transparent 70%)",
+        pointerEvents: "none",
+      }} />
+
+      <div className="animate-fade-up" style={{ width: "100%", maxWidth: 360 }}>
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-gold to-gold-dark mb-4">
-            <span className="text-navy-dark text-2xl font-bold font-display">A</span>
+        <div style={{ textAlign: "center", marginBottom: 36 }}>
+          <div style={{
+            width: 60, height: 60, borderRadius: 18, margin: "0 auto 14px",
+            background: "linear-gradient(135deg, #b8832a, #e8ab3a)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            boxShadow: "0 8px 32px rgba(201,146,42,0.35)",
+          }}>
+            <svg viewBox="0 0 24 24" fill="#060d1a" width="26" height="26">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
           </div>
-          <h1 className="text-cream text-2xl font-bold tracking-tight">Welcome back</h1>
-          <p className="text-cream/40 text-sm mt-1">Sign in to AfroMuziki</p>
+          <h1 style={{
+            fontFamily: "'Playfair Display', serif",
+            fontSize: 26, fontWeight: 700, color: "#f2e8d5",
+            letterSpacing: "-0.02em", marginBottom: 4,
+          }}>Welcome back</h1>
+          <p style={{ fontSize: 13, color: "rgba(242,232,213,0.4)", fontWeight: 500 }}>
+            Sign in to AfroMuziki
+          </p>
         </div>
 
-        <div className="space-y-4">
-          <div>
-            <label className="text-cream/60 text-xs font-semibold uppercase tracking-wider block mb-1.5">Email</label>
-            <input
-              type="email"
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              placeholder="you@example.com"
-              className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder-cream/25 outline-none focus:border-gold/50 transition-colors"
-            />
-          </div>
-          <div>
-            <label className="text-cream/60 text-xs font-semibold uppercase tracking-wider block mb-1.5">Password</label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              placeholder="••••••••"
-              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-              className="w-full bg-navy border border-white/10 rounded-xl px-4 py-3 text-cream text-sm placeholder-cream/25 outline-none focus:border-gold/50 transition-colors"
-            />
-          </div>
+        {/* Card */}
+        <div style={{
+          background: "rgba(12,24,41,0.7)",
+          border: "1px solid rgba(201,146,42,0.12)",
+          borderRadius: 20, padding: 24,
+          backdropFilter: "blur(20px)",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+        }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div>
+              <label style={{
+                display: "block", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "rgba(242,232,213,0.45)", marginBottom: 8,
+              }}>Email</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="you@example.com"
+                style={{ width: "100%", padding: "12px 16px", fontSize: 14 }}
+              />
+            </div>
+            <div>
+              <label style={{
+                display: "block", fontSize: 11, fontWeight: 700,
+                letterSpacing: "0.12em", textTransform: "uppercase",
+                color: "rgba(242,232,213,0.45)", marginBottom: 8,
+              }}>Password</label>
+              <input
+                type="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="••••••••"
+                onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                style={{ width: "100%", padding: "12px 16px", fontSize: 14 }}
+              />
+            </div>
 
-          {error && <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">{error}</p>}
+            {error && (
+              <div style={{
+                background: "rgba(220,60,60,0.1)", border: "1px solid rgba(220,60,60,0.2)",
+                borderRadius: 10, padding: "10px 14px",
+                fontSize: 13, color: "#f08080",
+              }}>{error}</div>
+            )}
 
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-gold-dark to-gold text-navy-dark font-bold py-3 rounded-xl transition-opacity disabled:opacity-60 hover:opacity-90"
-          >
-            {loading ? "Signing in…" : "Sign In"}
-          </button>
+            <button className="btn-gold" onClick={handleSubmit} disabled={loading} style={{ marginTop: 4 }}>
+              {loading ? "Signing in…" : "Sign In"}
+            </button>
+          </div>
         </div>
 
-        <p className="text-center text-cream/40 text-sm mt-6">
+        <p style={{ textAlign: "center", marginTop: 20, fontSize: 13, color: "rgba(242,232,213,0.35)" }}>
           No account?{" "}
-          <Link to="/register" className="text-gold font-semibold hover:underline">Register</Link>
+          <Link to="/register" style={{ color: "#e8ab3a", fontWeight: 700, textDecoration: "none" }}>
+            Join AfroMuziki
+          </Link>
         </p>
       </div>
     </div>
