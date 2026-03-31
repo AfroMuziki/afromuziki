@@ -7,7 +7,7 @@ const router = express.Router();
 // Initialize Supabase with service role key
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_SERVICE_KEY
 );
 
 // REGISTER - Creates user in auth.users and auto-creates profile
