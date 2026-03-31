@@ -128,59 +128,53 @@ const authLimiter = rateLimit({
 // ── Routes ────────────────────────────────────────────────────────────────────
 app.get("/health", (_, res) => res.json({ status: "ok", service: "afromuziki-api" }));
 
-// 🔍 ADD THIS TEST ROUTE - Place it BEFORE the 404 handler
-app.get("/test-db", async (req, res) => {
+// Add this after your existing routes (after app.use("/upload", uploadRoutes))
+// and before the 404 handler
+
+// Simple database test endpoint
+app.get("/db-test", async (req, res) => {
+  console.log("🔍 Database test endpoint called");
+  
+  // Import supabase if not already imported
+  const { createClient } = await import('@supabase/supabase-js');
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+  
   try {
-    const results = {
-      timestamp: new Date().toISOString(),
-      environment: {
-        SUPABASE_URL: process.env.SUPABASE_URL ? "✅ Set" : "❌ Missing",
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ Set" : "❌ Missing",
-      }
-    };
+    // Simple connection test
+    const { data, error } = await supabase
+      .from('users')
+      .select('count')
+      .limit(1);
     
-    // Test Supabase connection
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('count')
-        .limit(1);
-      
-      if (error) {
-        results.supabase_connection = `❌ Failed: ${error.message}`;
-      } else {
-        results.supabase_connection = "✅ Connected successfully";
-      }
-    } catch (error) {
-      results.supabase_connection = `❌ Error: ${error.message}`;
+    if (error) {
+      console.error("Database error:", error);
+      return res.json({
+        status: "error",
+        message: error.message,
+        hint: error.hint,
+        details: error.details
+      });
     }
     
-    // List tables
-    try {
-      const { data: tables, error: tablesError } = await supabase
-        .from('information_schema.tables')
-        .select('table_name')
-        .eq('table_schema', 'public');
-      
-      if (tablesError) {
-        results.tables = `❌ ${tablesError.message}`;
-      } else {
-        results.tables = tables?.map(t => t.table_name) || [];
-      }
-    } catch (error) {
-      results.tables = `❌ ${error.message}`;
-    }
-    
-    res.json(results);
+    res.json({
+      status: "success",
+      message: "Database connected!",
+      data: data,
+      supabase_url: process.env.SUPABASE_URL ? "Set" : "Not set",
+      has_key: process.env.SUPABASE_SERVICE_ROLE_KEY ? "Yes" : "No"
+    });
   } catch (error) {
-    console.error("Test endpoint error:", error);
-    res.status(500).json({ error: error.message });
+    console.error("Connection error:", error);
+    res.json({
+      status: "error",
+      message: error.message,
+      stack: error.stack
+    });
   }
 });
-
-app.use("/auth", authLimiter, authRoutes);
-app.use("/tracks", tracksRoutes);
-app.use("/upload", uploadRoutes);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────
 app.use((_, res) => res.status(404).json({ error: "Route not found" }));
