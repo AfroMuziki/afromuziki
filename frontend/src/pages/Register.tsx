@@ -91,8 +91,8 @@ export default function Register() {
               <label style={labelStyle}>I am a</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                 {[
-                  { value: "listener", label: "🎧 Listener", desc: "Discover music" },
-                  { value: "artist", label: "🎤 Artist", desc: "Upload & share" },
+                  { value: "listener", label: "Listener", desc: "Discover music" },
+                  { value: "artist", label: "Artist", desc: "Upload & share" },
                 ].map((r) => (
                   <button
                     key={r.value}
