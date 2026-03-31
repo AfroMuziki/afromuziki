@@ -154,3 +154,32 @@ testDbConnection();
 app.listen(PORT, () => {
   console.log(`AfroMuziki API running on port ${PORT}`);
 });
+
+
+
+// Add to server.js temporarily
+app.get("/debug/auth-status", async (req, res) => {
+  try {
+    // Get all users from auth.users
+    const { data: authUsers, error: authError } = await supabase
+      .from('auth.users')
+      .select('email, id, email_confirmed_at, created_at')
+      .limit(5);
+    
+    // Get users from public.users
+    const { data: publicUsers, error: publicError } = await supabase
+      .from('users')
+      .select('email, id, full_name, created_at')
+      .limit(5);
+    
+    res.json({
+      auth_users: authUsers,
+      public_users: publicUsers,
+      auth_count: authUsers?.length || 0,
+      public_count: publicUsers?.length || 0,
+      supabase_url: process.env.SUPABASE_URL ? "Set" : "Missing"
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
