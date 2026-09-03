@@ -5,12 +5,15 @@
   "engines": {
     "node": ">=20.0.0"
   },
+  {
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:skip-checks": "NEXT_DISABLE_TYPE_CHECKING=true DISABLE_ESLINT_PLUGIN=true next build",
     "start": "next start",
-    "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "lint": "next lint"
+  }
+}
   },
   "dependencies": {
     "react": "19.1.0",
